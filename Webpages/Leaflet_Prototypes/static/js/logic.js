@@ -31,10 +31,27 @@ let overlays = {
     "startupCount": L.markerClusterGroup(),
     "startupTotalValue": L.markerClusterGroup({
         iconCreateFunction: function (cluster) {
-        return L.divIcon({ html: '<b>' + (cluster.getAllChildMarkers()).map((a) => valueLookup.get(a.getLatLng().toString()))
+        return L.divIcon({ html: '<b>' + (cluster.getAllChildMarkers()).map((a) => valueLookup.get(a.getLatLng().toString())[0])
             .reduce((a, b) => (a + b)).toExponential(4) + '</b>' });
-    }
+    }}),
+    "startupAverageValue": L.markerClusterGroup({
+        iconCreateFunction: function (cluster) {
+            return L.divIcon({
+                html: '<b>' + getAvgFunding(cluster).toExponential(4) + '</b>'
+            });
+        }
     })
+}
+
+//function to give average funding values for each cluster marker
+//too complicated for one-line code
+function getAvgFunding(cluster) {
+    let total_money = (cluster.getAllChildMarkers()).map((a) => valueLookup.get(a.getLatLng().toString())[0])
+        .reduce((a, b) => (a + b))
+    let total_companies = (cluster.getAllChildMarkers()).map((a) => valueLookup.get(a.getLatLng().toString())[1])
+        .reduce((a, b) => (a + b))
+    
+    return total_money/total_companies
 }
 
 // Create a legend to display information about our map
@@ -63,12 +80,6 @@ L.control.layers(baseLayers, overlays).addTo(myMap)
 // Add the info legend to the map
 info.addTo(myMap);
 
-//helper function to conver lat/lng to strings for use in mapping
-//values to total funding
-function latlngToString(lat, lng) {
-    return `(${lat},${lng})`
-}
-
 
 let valueLookup = new Map();
 
@@ -84,7 +95,11 @@ fetch("../../Test_Data/full_table.json").then(response => response.json()).then(
 
         //setup markers for funding values
         overlays["startupTotalValue"].addLayer(L.marker([lat, lng], {}))
-        valueLookup.set(L.latLng(lat, lng).toString(), item["funding_total_usd"])
+        //setup markers for average funding 
+        overlays["startupAverageValue"].addLayer(L.marker([lat, lng], {}))
+
+        //add coordinates key to relate to total funding for marker, as well as the number of companies there
+        valueLookup.set(L.latLng(lat, lng).toString(), [item["funding_total_usd"], item["company_count"]])
     }
 })
 
