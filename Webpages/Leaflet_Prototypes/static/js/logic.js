@@ -40,6 +40,14 @@ let overlays = {
                 html: '<b>' + getAvgFunding(cluster).toExponential(4) + '</b>'
             });
         }
+    }),
+    "percentageStartupCountWorldwide": L.markerClusterGroup({
+        iconCreateFunction: function (cluster) {
+            return L.divIcon({
+                html: '<b>' + (((cluster.getAllChildMarkers()).map((a) => valueLookup.get(a.getLatLng().toString())[1])
+                    .reduce((a, b) => (a + b))) / allStartupsTotalCount * 100).toFixed(2) + '</b>'
+            });
+        }
     })
 }
 
@@ -82,6 +90,7 @@ info.addTo(myMap);
 
 
 let valueLookup = new Map();
+let allStartupsTotalCount = 0;
 
 fetch("../../Test_Data/full_table.json").then(response => response.json()).then(function addResults(obj) {
     for (let item of Object.values(obj)) {
@@ -94,12 +103,17 @@ fetch("../../Test_Data/full_table.json").then(response => response.json()).then(
         }
 
         //setup markers for funding values
-        overlays["startupTotalValue"].addLayer(L.marker([lat, lng], {}))
+        overlays["startupTotalValue"].addLayer(L.marker([lat, lng]))
         //setup markers for average funding 
-        overlays["startupAverageValue"].addLayer(L.marker([lat, lng], {}))
+        overlays["startupAverageValue"].addLayer(L.marker([lat, lng]))
+        //setup markers for percentage of worldwide startup count 
+        overlays["percentageStartupCountWorldwide"].addLayer(L.marker([lat, lng]))
 
         //add coordinates key to relate to total funding for marker, as well as the number of companies there
         valueLookup.set(L.latLng(lat, lng).toString(), [item["funding_total_usd"], item["company_count"]])
+
+        //increase the total startup count variable, to track count of all startups combined
+        allStartupsTotalCount+=item["company_count"]
     }
 })
 
