@@ -28,8 +28,13 @@ let baseLayers = {
 }
 
 let overlays = {
-    "startupCount": L.markerClusterGroup()
-    // "Tectonic Plates": L.layerGroup()
+    "startupCount": L.markerClusterGroup(),
+    "startupTotalValue": L.markerClusterGroup({
+        iconCreateFunction: function (cluster) {
+        return L.divIcon({ html: '<b>' + (cluster.getAllChildMarkers()).map((a) => valueLookup.get(a.getLatLng().toString()))
+            .reduce((a, b) => (a + b)).toExponential(4) + '</b>' });
+    }
+    })
 }
 
 // Create a legend to display information about our map
@@ -58,14 +63,28 @@ L.control.layers(baseLayers, overlays).addTo(myMap)
 // Add the info legend to the map
 info.addTo(myMap);
 
+//helper function to conver lat/lng to strings for use in mapping
+//values to total funding
+function latlngToString(lat, lng) {
+    return `(${lat},${lng})`
+}
+
+
+let valueLookup = new Map();
 
 fetch("../../Test_Data/full_table.json").then(response => response.json()).then(function addResults(obj) {
     for (let item of Object.values(obj)) {
         console.log(item)
+        let lat = item["Latitude"]
+        let lng = item["Longitude"]
+        //add company count marker numbers
         for (let i = 0; i<item["company_count"]; i++) {
-            overlays["startupCount"].addLayer(L.marker([item["Latitude"], item["Longitude"]]))
+            overlays["startupCount"].addLayer(L.marker([lat, lng]))
         }
-        
+
+        //setup markers for funding values
+        overlays["startupTotalValue"].addLayer(L.marker([lat, lng], {}))
+        valueLookup.set(L.latLng(lat, lng).toString(), item["funding_total_usd"])
     }
 })
 
