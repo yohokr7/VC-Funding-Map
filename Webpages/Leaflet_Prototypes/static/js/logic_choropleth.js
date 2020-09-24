@@ -28,7 +28,7 @@ let baseLayers = {
 }
 
 let overlays = {
-    "countries": L.layerGroup()
+    // "countries": L.layerGroup()
     // "startupTotalValue": L.markerClusterGroup({
     //     iconCreateFunction: function (cluster) {
     //     return L.divIcon({ html: '<b>' + (cluster.getAllChildMarkers()).map((a) => valueLookup.get(a.getLatLng().toString())[0])
@@ -82,7 +82,6 @@ info.onAdd = function () {
 // }).addTo(myMap);
 
 
-L.control.layers(baseLayers, overlays).addTo(myMap)
 
 
 // Add the info legend to the map
@@ -91,6 +90,7 @@ info.addTo(myMap);
 
 let valueLookup = new Map();
 let allStartupsTotalCount = 0;
+let updatedCountryGeoJSON;
 
 function addCountry(country){
     let coords = country.geometry.coordinates.map(a => a.map((b) => b.map(c => c.reverse())))
@@ -98,13 +98,65 @@ function addCountry(country){
 }
 
 
-fetch("https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson")
-.then(a => a.json()).then((a) => {
-    console.log(a)
-    for (let country of a.features) {
-        addCountry(country)
-    }
-})
+// fetch("https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson")
+// .then(a => a.json()).then((a) => {
+//     console.log(a)
+//     for (let country of a.features) {
+//         addCountry(country)
+//     }
+//     updatedCountryGeoJSON = a
+// }).then(fetch("../../Test_Data / full_table.json").then(response => response.json()))
+
+Promise.all([fetch("https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson")
+    .then(a => a.json()), fetch("../../Test_Data/full_table.json").then(response => response.json())])
+    .then(([countryGeoJSON, ourData]) => {
+        console.log([countryGeoJSON, ourData])
+        //first group our data by country
+        //and sum all companies and their funding
+        let countryAggregated = {}
+        for (let item of Object.values(ourData)) {
+            if(!(item["country_code"] in countryAggregated)) {
+                let company_count = Object.values(ourData).filter(a => a["country_code"]===item["country_code"]).reduce((a, b)=> a+b["company_count"], 0)
+                let total_funding = Object.values(ourData).filter(a => a["country_code"]===item["country_code"]).reduce((a, b)=> a+b["funding_total_usd"], 0)
+                countryAggregated[item["country_code"]] = [company_count, total_funding]
+            }
+        }
+        //now combine data aggregated by country with 
+        //countryGeoJSON data
+        let updateFeatures = []
+        for (let item of countryGeoJSON["features"]) {
+            if(item["properties"]["ISO_A3"] in countryAggregated) {
+                item["properties"]["company_count"] = countryAggregated[item["properties"]["ISO_A3"]][0]
+                item["properties"]["funding_total_usd"] = countryAggregated[item["properties"]["ISO_A3"]][1]
+                // console.log(item)
+            }
+            else {
+                item["properties"]["company_count"] = 0
+                item["properties"]["funding_total_usd"] = 0
+            }
+            updateFeatures.push(item)
+        }
+
+        //remove USA from calculation for one of the views (so that second-tier startup results show)
+        countryGeoJSON.features = updateFeatures
+
+        overlays["country_company_count"] = L.choropleth(countryGeoJSON, {
+            valueProperty: 'company_count', // which property in the features to use
+            scale: ['white', 'blue'], // chroma.js scale - include as many as you like
+            steps: 5, // number of breaks or steps in range
+            mode: 'q', // q for quantile, e for equidistant, k for k-means
+            style: {
+                color: '#fff', // border color
+                weight: 2,
+                fillOpacity: 0.8
+            },
+            onEachFeature: function (feature, layer) {
+                layer.bindPopup("<p>"+feature.properties["company_count"]+"</p>")
+            }
+        })
+
+        L.control.layers(baseLayers, overlays).addTo(myMap)
+    })
 
 // fetch("../../Test_Data/full_table.json").then(response => response.json()).then(function addResults(obj) {
 //     for (let item of Object.values(obj)) {
