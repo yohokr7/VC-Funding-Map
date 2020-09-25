@@ -43,12 +43,14 @@ let overlays = {
     }),
     "percentageStartupCountWorldwide": L.markerClusterGroup({
         iconCreateFunction: function (cluster) {
+            let countPercent = getWorldCountPercent(cluster);
+            let sqrtCountPercent = Math.sqrt(countPercent)
             return L.divIcon({
-                html: `<svg width="${10 * Math.sqrt(getWorldCountPercent(cluster))}" height="${10 * Math.sqrt(getWorldCountPercent(cluster))}">` +
-                    `<circle cx="${5 * Math.sqrt(getWorldCountPercent(cluster))}" cy="${5 * Math.sqrt(getWorldCountPercent(cluster))}" r="${5 * Math.sqrt(getWorldCountPercent(cluster))}" stroke="black" stroke-width="1" fill="green" />`
+                html: `<svg width="${10 * sqrtCountPercent}" height="${10 * sqrtCountPercent}">` +
+                    `<circle cx="${5 * sqrtCountPercent}" cy="${5 * sqrtCountPercent}" r="${5 * sqrtCountPercent}" stroke="black" stroke-width="1" fill="green" />`
                     + `</svg>`
-                    + '<b>' + getWorldCountPercent(cluster) + '%</b>',
-                iconAnchor: L.point([5 * Math.sqrt(getWorldCountPercent(cluster)), 5 * Math.sqrt(getWorldCountPercent(cluster))]),
+                    + '<b>' + countPercent + '%</b>',
+                iconAnchor: L.point([5 * sqrtCountPercent, 5 * sqrtCountPercent]),
                 className: "circleIcon"
             });
         }
@@ -134,7 +136,20 @@ fetch("../../Test_Data/full_table.json").then(response => response.json()).then(
         //setup markers for average funding 
         overlays["startupAverageValue"].addLayer(L.marker([lat, lng]))
         //setup markers for percentage of worldwide startup count 
-        overlays["percentageStartupCountWorldwide"].addLayer(L.marker([lat, lng]))
+        //use custom divIcons to show marker circles and percentages for initial clusters/single companies
+        let countPercent = (item["company_count"] / allStartupsTotalCount * 100).toFixed(2)
+        let sqrtCountPercent = Math.sqrt(countPercent)
+        overlays["percentageStartupCountWorldwide"].addLayer(L.marker([lat, lng], 
+            {
+                icon: L.divIcon({
+                    html: `<svg width="${10 * sqrtCountPercent}" height="${10 * sqrtCountPercent}">` +
+                        `<circle cx="${5 * sqrtCountPercent}" cy="${5 * sqrtCountPercent}" r="${5 * sqrtCountPercent}" stroke="black" stroke-width="1" fill="green" />`
+                        + `</svg>`
+                        + '<b>' + countPercent + '%</b>',
+                    iconAnchor: L.point([5 * sqrtCountPercent, 5 * sqrtCountPercent]),
+                    className: "circleIcon"
+                })
+            }))
 
         //add coordinates key to relate to total funding for marker, as well as the number of companies there
         valueLookup.set(L.latLng(lat, lng).toString(), [item["funding_total_usd"], item["company_count"]])
