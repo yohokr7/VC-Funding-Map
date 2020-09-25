@@ -23,7 +23,7 @@ let overlays = {
                 html: `<svg width="${30}" height="${30}">`+
                     `<circle cx="${15}" cy="${15}" r="${15}" stroke="black" stroke-width="1" fill=${getTotalFundingColor(getTotalFunding(cluster))} />`
                                  +`</svg>`
-                    + '<b>$' + getTotalFunding(cluster).toExponential(4) + '</b>' ,
+                    + '<b>$' + getTotalFunding(cluster).toExponential(4) + '</b>',
             iconAnchor: L.point([15, 15]),
             className: "circleIcon"
         });
@@ -32,7 +32,12 @@ let overlays = {
     "startupAverageValue": L.markerClusterGroup({
         iconCreateFunction: function (cluster) {
             return L.divIcon({
-                html: '<b>' + getAvgFunding(cluster).toExponential(4) + '</b>'
+                html: `<svg width="${30}" height="${30}">` +
+                    `<circle cx="${15}" cy="${15}" r="${15}" stroke="black" stroke-width="1" fill=${getAvgFundingColor(getAvgFunding(cluster))} />`
+                    + `</svg>`
+                    + '<b>$' + getAvgFunding(cluster).toExponential(4) + '</b>',
+                iconAnchor: L.point([15, 15]),
+                className: "circleIcon"
             });
         }
     }),
@@ -52,15 +57,26 @@ function getTotalFunding(cluster) {
         .reduce((a, b) => (a + b))
 }
 
+//generate array of colors for the total funding cluster markers, 
+//based on orders of magnitude (base 10)
 let totalFundingScale = chroma.scale(['yellow', 'red']).mode('rgb').colors(7)
 
-console.log(totalFundingScale)
-
+//get cluster marker color based on total funding amount
 function getTotalFundingColor(val) {
     let num = Math.floor((Math.log10(val))) - 5
-    console.log(num)
     return totalFundingScale[num]
 }
+
+//generate array of colors for the average funding cluster markers, 
+//based on orders of magnitude (base 10)
+let avgFundingScale = chroma.scale(["yellow", "red"]).mode("lch").colors(5)
+
+//get cluster marker color based on average funding amount
+function getAvgFundingColor(val) {
+    let num = Math.floor((Math.log10(val))) - 4
+    return avgFundingScale[num]
+}
+
 
 //function to give average funding values for each cluster marker
 //too complicated for one-line code
