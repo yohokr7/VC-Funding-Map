@@ -7,22 +7,10 @@ let myMap = L.map("map", {
 
 //make the layers for controlling the map
 let baseLayers = {
-    "Satellite": L.tileLayer("https://api.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-        maxZoom: 18,
-        id: "mapbox.satellite",
-        accessToken: API_KEY
-    }),
     "Regular": L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
         attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
         maxZoom: 18,
         id: "mapbox.streets",
-        accessToken: API_KEY
-    }),
-    "Terrain": L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-        attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-        maxZoom: 18,
-        id: "mapbox.mapbox-terrain-v2",
         accessToken: API_KEY
     })
 }
@@ -73,15 +61,6 @@ info.onAdd = function () {
     return div;
 };
 
-// // Adding tile layer
-// L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-//     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-//     maxZoom: 18,
-//     id: "mapbox.streets",
-//     accessToken: API_KEY
-// }).addTo(myMap);
-
-
 L.control.layers(baseLayers, overlays).addTo(myMap)
 
 
@@ -115,19 +94,20 @@ fetch("../../Test_Data/full_table.json").then(response => response.json()).then(
         //increase the total startup count variable, to track count of all startups combined
         allStartupsTotalCount+=item["company_count"]
     }
+}).then(() => {
+    //set initial base layer and overlays here
+    document.querySelector(".leaflet-control-layers-base").firstElementChild.click()
+    let addedLayers = document.querySelector(".leaflet-control-layers-overlays").children
+    
+    for (let i = 0; i < addedLayers.length; i++) {
+        let inputEl = addedLayers[i].querySelector("input")
+        inputEl.type = "radio"
+        inputEl.name = "separateLayers"
+    }
+
+    //set the initial layer
+    addedLayers[0].click()
 })
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
