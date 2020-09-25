@@ -44,8 +44,12 @@ let overlays = {
     "percentageStartupCountWorldwide": L.markerClusterGroup({
         iconCreateFunction: function (cluster) {
             return L.divIcon({
-                html: '<b>' + (((cluster.getAllChildMarkers()).map((a) => valueLookup.get(a.getLatLng().toString())[1])
-                    .reduce((a, b) => (a + b))) / allStartupsTotalCount * 100).toFixed(2) + '</b>'
+                html: `<svg width="${10 * Math.sqrt(getWorldCountPercent(cluster))}" height="${10 * Math.sqrt(getWorldCountPercent(cluster))}">` +
+                    `<circle cx="${5 * Math.sqrt(getWorldCountPercent(cluster))}" cy="${5 * Math.sqrt(getWorldCountPercent(cluster))}" r="${5 * Math.sqrt(getWorldCountPercent(cluster))}" stroke="black" stroke-width="1" fill="green" />`
+                    + `</svg>`
+                    + '<b>' + getWorldCountPercent(cluster) + '%</b>',
+                iconAnchor: L.point([5 * Math.sqrt(getWorldCountPercent(cluster)), 5 * Math.sqrt(getWorldCountPercent(cluster))]),
+                className: "circleIcon"
             });
         }
     })
@@ -87,6 +91,12 @@ function getAvgFunding(cluster) {
         .reduce((a, b) => (a + b))
     
     return total_money/total_companies
+}
+
+//startup count worldwide percentage calculation function 
+function getWorldCountPercent(cluster) {
+    return (((cluster.getAllChildMarkers()).map((a) => valueLookup.get(a.getLatLng().toString())[1])
+        .reduce((a, b) => (a + b))) / allStartupsTotalCount * 100).toFixed(2)
 }
 
 // Create a legend to display information about our map
