@@ -1,3 +1,4 @@
+
 // Creating map object
 let myMap = L.map("map", {
     center: [34.0522, -118.2437],
@@ -91,6 +92,7 @@ info.addTo(myMap);
 let valueLookup = new Map();
 let allStartupsTotalCount = 0;
 let updatedCountryGeoJSON;
+let usData = [0, 0]
 
 function addCountry(country){
     let coords = country.geometry.coordinates.map(a => a.map((b) => b.map(c => c.reverse())))
@@ -144,14 +146,91 @@ Promise.all([fetch("https://raw.githubusercontent.com/datasets/geo-countries/mas
             valueProperty: 'company_count', // which property in the features to use
             scale: ['white', 'blue'], // chroma.js scale - include as many as you like
             steps: 5, // number of breaks or steps in range
-            mode: 'q', // q for quantile, e for equidistant, k for k-means
+            mode: 'e', // q for quantile, e for equidistant, k for k-means
             style: {
                 color: '#fff', // border color
                 weight: 2,
                 fillOpacity: 0.8
             },
             onEachFeature: function (feature, layer) {
-                layer.bindPopup("<p>"+feature.properties["company_count"]+"</p>")
+                let popupHTML = "<p>" + getCountryName(feature.properties["ISO_A2"]) + "</p>"
+                //add country name to popup
+                popupHTML += "<p>Company Count: " + feature.properties["company_count"] + "</p>"
+                // console.log(popupHTML)
+                layer.bindPopup(popupHTML)
+            }
+        })
+
+        return [countryGeoJSON, ourData]
+    })
+    .then(([countryGeoJSON, ourData]) => {
+        // console.log(countryGeoJSON)
+        for (let item of countryGeoJSON["features"]) {
+            if(item["properties"]["ISO_A3"] === "USA") {
+                usData[0] = item["properties"]["company_count"]
+                item["properties"]["company_count"] = 0
+                // console.log(item)
+            }
+        }
+
+        overlays["second_tier_company_count"] = L.choropleth(countryGeoJSON, {
+            valueProperty: 'company_count', // which property in the features to use
+            scale: ['white', 'blue'], // chroma.js scale - include as many as you like
+            steps: 7, // number of breaks or steps in range
+            mode: 'e', // q for quantile, e for equidistant, k for k-means
+            style: {
+                color: '#fff', // border color
+                weight: 2,
+                fillOpacity: 0.8
+            },
+            onEachFeature: function (feature, layer) {
+                let popupHTML = "<p>" + getCountryName(feature.properties["ISO_A2"]) + "</p>"
+                //add country name to popup
+                if (getCountryName(feature.properties["ISO_A2"]) !== "United States") {
+                    popupHTML += "<p>Company Count: " + feature.properties["company_count"] + "</p>"
+                }
+                // console.log(popupHTML)
+                layer.bindPopup(popupHTML)
+            }
+        })
+
+        return [countryGeoJSON, ourData]
+    }).then(([countryGeoJSON, ourData]) => {
+
+        //calculate average funding value and add a property
+        for(let item of countryGeoJSON["features"]) {
+            if(item["properties"]["ISO_A3"] === "USA") {
+                item["properties"]["company_count"] = usData[0]
+            }
+            if (item["properties"]["company_count"] !== 0) {
+                item["properties"]["avg_startup_funding"] = (item["properties"]["funding_total_usd"]) / item["properties"]["company_count"]
+            }
+            else {
+                item["properties"]["avg_startup_funding"] = 0
+            }
+            
+        }
+
+        console.log(countryGeoJSON)
+
+        overlays["average_funding_usd"] = L.choropleth(countryGeoJSON, {
+            valueProperty: 'avg_startup_funding', // which property in the features to use
+            scale: ['white', 'blue'], // chroma.js scale - include as many as you like
+            steps: 5, // number of breaks or steps in range
+            mode: 'k', // q for quantile, e for equidistant, k for k-means
+            style: {
+                color: '#fff', // border color
+                weight: 2,
+                fillOpacity: 0.8
+            },
+            onEachFeature: function (feature, layer) {
+                let popupHTML = "<p>" + getCountryName(feature.properties["ISO_A2"]) + "</p>"
+                //add country name to popup
+                // if (getCountryName(feature.properties["ISO_A2"]) !== "United States") {
+                popupHTML += `<p>Funding Amount: $${((feature.properties["avg_startup_funding"]).toExponential(2))}</p>`
+                // }
+                // console.log(popupHTML)
+                layer.bindPopup(popupHTML)
             }
         })
 
