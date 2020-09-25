@@ -168,9 +168,26 @@ fetch("../../Test_Data/full_table.json").then(response => response.json()).then(
         inputEl.name = "separateLayers"
     }
 
+    //setup event listener to add legend as necessary
+    let overlayLegendSelector = document.querySelector(".leaflet-control-layers-overlays")
+
+    overlayLegendSelector.addEventListener("change", function(e) {
+        removeLegend()
+        console.log(e.target.parentElement.children)
+        if (e.target.parentElement.children.item(1).textContent.includes("startupTotalValue")) {
+            addLegend("Total Funding (Magnitude $)", ["Hundreds of Thousands (10^5)",
+                "Millions (10^6)", "Tens of Millions (10^7)", "Hundreds of Millions (10^8)", "Billions (10^9)",
+                "Tens of Billions (10^10)", "Hundreds of Billions (10^11)"], totalFundingScale)
+            e.stopPropagation()
+        }
+    })
+
     //set the initial layer
     addedLayers[0].click()
 })
+
+//create an object to choose cases for whether a legend should be added or not
+
 
 
 // get geoJSON data and add markers to map
@@ -224,102 +241,74 @@ fetch("../../Test_Data/full_table.json").then(response => response.json()).then(
 //     }
 // }
 
-// //get both fetch events to give the JSON data, then 
-// //put into the overlays
-// //add legend
-// //and add overlays to map
-// Promise.all([fetch(USGS_url).then(data => data.json()), fetch(tectonicPlatesURL).then(data => data.json()).then((data) => {
-//     //need to reverse the coordinates to get in the correct format for leaflet
-//     for (let i = 0; i < data.features.length; i++) {
-//         data.features[i].coordinates = data.features[i].geometry.coordinates.map((a) => a.reverse())
-//     }
-//     return data
-// })])
-// .then(([markers, plates]) => {
-//     setMarkers(markers);
-//     addPlates(plates);
-//     // now add the legend!
-//     addLegend(colorCutoffDepths, colorMap)
-//     // add all layers to myMap object once all layers have been populated with markers/polylines
-//     L.control.layers(baseLayers, overlays[0]).addTo(myMap)
-// })
-// .then(() => {
-//     //set initial base layer and overlays here
-//     document.querySelector(".leaflet-control-layers-base").firstElementChild.click()
-//     let overlays = document.querySelector(".leaflet-control-layers-overlays").children
-//     for (let i = 0; i < overlays.length; i++) {
-//         overlays[i].click()
-//     }
-// })
 
 
-// // Add legend to map - function defined here
-// function makeSwatch(color, size) {
-//     let colorSwatch = document.createElement("span")
-//     // colorSwatch.style.width = size + "px";
-//     // colorSwatch.style.height = size + "px";
-//     colorSwatch.setAttribute("width", size)
-//     colorSwatch.setAttribute("height", size)
-//     colorSwatch.style.backgroundColor = "#" + color;
+// Add legend to map - function defined here
+function makeSwatch(color, size) {
+    let colorSwatch = document.createElement("span")
+    // colorSwatch.style.width = size + "px";
+    // colorSwatch.style.height = size + "px";
+    colorSwatch.setAttribute("width", size)
+    colorSwatch.setAttribute("height", size)
+    colorSwatch.style.backgroundColor = color;
 
-//     let text = ""
+    let text = ""
 
-//     for (let i = 0; i<size; i++) {
-//         text += " "
-//     }
+    for (let i = 0; i<size; i++) {
+        text += " "
+    }
 
-//     colorSwatch.textContent = text;
+    colorSwatch.textContent = text;
+    return colorSwatch
 
-//     //OLD CODE THAT TRIED TO ADD AN SVG FOR A SWATCH
-//     //TOO HARD TO ADD AN SVG DIRECTLY - NEED SPECIAL CODE
-//     // let rect = document.createElement("rect");
-//     // // rect.style.width = size + "px";
-//     // // rect.style.height = size + "px";
-//     // rect.setAttribute("width", size)
-//     // rect.setAttribute("height", size)
-//     // rect.style.fill = "#"+color
-//     // rect.style.rx = 0.2*size
-
-//     // colorSwatch.appendChild(rect)
-
-//     return colorSwatch
-
-// }
+}
 
 
+function addLegend(title, colorDepths, colors) {
+    let legend_el = document.querySelector(".legend");
+    let headerNote = document.createElement("h3")
+    headerNote.textContent = title
+    legend_el.appendChild(headerNote);
 
-// function addLegend(colorDepths, colors) {
-//     let legend_el = document.querySelector(".legend");
-//     let headerNote = document.createElement("h3")
-//     headerNote.textContent = "Depths"
-//     legend_el.appendChild(headerNote);
+    for (let i = 0; i < colorDepths.length; i++) {
+        let colorSwatch = makeSwatch(colors[i], 4)
 
-//     for (let i = 0; i < colorDepths.length; i++) {
-//         let colorSwatch = makeSwatch(colors[i], 4)
-
-//         //create text element to add
-//         let curr_level = document.createElement("div")  
-
-//         if(i === 0) {
-//             curr_level.textContent += ` < ${colorDepths[0]}`
-//             legend_el.appendChild(curr_level);
-//         }
-//         else {
-//             curr_level.textContent = ` ${colorDepths[i - 1]} - ${colorDepths[i]}`
-//             legend_el.appendChild(curr_level);
-//         }
-
-//         curr_level.prepend(colorSwatch);
-//     }
-
-//     // Add final color and largest value category
-//     let lastInd = colorDepths.length
-//     let colorSwatch = makeSwatch(colors[lastInd], 4)
+        //create text element to add
+        let curr_level = document.createElement("div")  
 
 
-//     let currLevel = document.createElement("div");
-//     currLevel.textContent = ` > ${colorDepths[lastInd-1]}`
-//     legend_el.appendChild(currLevel);
-//     currLevel.prepend(colorSwatch)
+        curr_level.textContent = ` ${colorDepths[i]}`
+        legend_el.appendChild(curr_level);
 
-// }
+
+        curr_level.prepend(colorSwatch);
+    }
+
+    // Add final color and largest value category
+    let lastInd = colorDepths.length
+    let colorSwatch = makeSwatch(colors[lastInd], 4)
+
+
+    let currLevel = document.createElement("div");
+    currLevel.textContent = ` > ${colorDepths[lastInd-1]}`
+    legend_el.appendChild(currLevel);
+    currLevel.prepend(colorSwatch)
+
+}
+
+function checkLegend() {
+    return document.querySelector(".legend").children.length === 0 ? false : true;
+}
+
+function removeLegend() {
+    let legend_el = document.querySelector(".legend");
+    while(legend_el.children.length > 0) {
+        legend_el.removeChild(legend_el.firstChild)
+    }
+
+    // for (let i=0; i<legend_el.children.length; i++) {
+    //     legend_el.removeChild(legend_el.firstChild)
+    // }
+
+    console.log("success!")
+}
