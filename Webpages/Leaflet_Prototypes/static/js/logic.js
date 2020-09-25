@@ -21,12 +21,11 @@ let overlays = {
         iconCreateFunction: function (cluster) {
             return L.divIcon({
                 html: `<svg width="${30}" height="${30}">`+
-                                 `<circle cx="${15}" cy="${15}" r="${15}" stroke="black" stroke-width="1" fill=red />`
+                    `<circle cx="${15}" cy="${15}" r="${15}" stroke="black" stroke-width="1" fill=${getTotalFundingColor(getTotalFunding(cluster))} />`
                                  +`</svg>`
-            + '<b>' + (cluster.getAllChildMarkers()).map((a) => valueLookup.get(a.getLatLng().toString())[0])
-            .reduce((a, b) => (a + b)).toExponential(4) + '</b>' ,
-            iconAnchor: L.point([15, 15])
-//             className: "circleIcon"}),
+                    + '<b>$' + getTotalFunding(cluster).toExponential(4) + '</b>' ,
+            iconAnchor: L.point([15, 15]),
+            className: "circleIcon"
         });
     }}),
         
@@ -45,6 +44,22 @@ let overlays = {
             });
         }
     })
+}
+
+//function to give total funding values for each cluster marker
+function getTotalFunding(cluster) {
+    return (cluster.getAllChildMarkers()).map((a) => valueLookup.get(a.getLatLng().toString())[0])
+        .reduce((a, b) => (a + b))
+}
+
+let totalFundingScale = chroma.scale(['yellow', 'red']).mode('rgb').colors(7)
+
+console.log(totalFundingScale)
+
+function getTotalFundingColor(val) {
+    let num = Math.floor((Math.log10(val))) - 5
+    console.log(num)
+    return totalFundingScale[num]
 }
 
 //function to give average funding values for each cluster marker
@@ -81,7 +96,6 @@ let allStartupsTotalCount = 0;
 
 fetch("../../Test_Data/full_table.json").then(response => response.json()).then(function addResults(obj) {
     for (let item of Object.values(obj)) {
-        console.log(item)
         let lat = item["Latitude"]
         let lng = item["Longitude"]
         //add company count marker numbers
