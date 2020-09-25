@@ -19,9 +19,17 @@ let overlays = {
     "startupCount": L.markerClusterGroup(),
     "startupTotalValue": L.markerClusterGroup({
         iconCreateFunction: function (cluster) {
-        return L.divIcon({ html: '<b>' + (cluster.getAllChildMarkers()).map((a) => valueLookup.get(a.getLatLng().toString())[0])
-            .reduce((a, b) => (a + b)).toExponential(4) + '</b>' });
+            return L.divIcon({
+                html: `<svg width="${30}" height="${30}">`+
+                                 `<circle cx="${15}" cy="${15}" r="${15}" stroke="black" stroke-width="1" fill=red />`
+                                 +`</svg>`
+            + '<b>' + (cluster.getAllChildMarkers()).map((a) => valueLookup.get(a.getLatLng().toString())[0])
+            .reduce((a, b) => (a + b)).toExponential(4) + '</b>' ,
+            iconAnchor: L.point([15, 15])
+//             className: "circleIcon"}),
+        });
     }}),
+        
     "startupAverageValue": L.markerClusterGroup({
         iconCreateFunction: function (cluster) {
             return L.divIcon({
@@ -108,8 +116,6 @@ fetch("../../Test_Data/full_table.json").then(response => response.json()).then(
     //set the initial layer
     addedLayers[0].click()
 })
-
-
 
 
 // get geoJSON data and add markers to map
