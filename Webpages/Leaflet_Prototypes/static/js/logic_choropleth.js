@@ -224,16 +224,26 @@ Promise.all([fetch("https://raw.githubusercontent.com/datasets/geo-countries/mas
 //create an object to choose cases for whether a legend should be added or not
 legendMapRelations = {
     "country_company_count": () => {
-        addLegend("Company Count by Country", overlays["country_company_count"]
-        .options.limits, overlays["country_company_count"].options.colors)
+        addLegend("Company Count", overlays["country_company_count"]
+        .options.limits.map((a, i, arr) => {
+            return i===0 ? Math.floor(a) : Math.floor(arr[i-1]) +" - " + Math.floor(a)
+        }), 
+        overlays["country_company_count"].options.colors)
     },
     "second_tier_company_count": () => {
-        addLegend("Company Count by Country<br>Tier II", overlays["second_tier_company_count"]
-            .options.limits, overlays["second_tier_company_count"].options.colors)
+        addLegend("Company Count (Tier II)", overlays["second_tier_company_count"]
+            .options.limits.map((a, i, arr) => {
+                return i === 0 ? Math.floor(a) : Math.floor(arr[i - 1]) + " - " + Math.floor(a)
+            }), 
+            overlays["second_tier_company_count"].options.colors)
     },
     "average_funding_usd": () => {
-        addLegend("Average Funding by Country ($)", overlays["average_funding_usd"]
-            .options.limits, overlays["average_funding_usd"].options.colors)
+        let arrSize = overlays["average_funding_usd"].options.limits.length;
+        addLegend("Average Funding ($)", overlays["average_funding_usd"]
+            .options.limits.filter((a, i) => i < arrSize-1).map((a, i, arr) => {
+                return i === 0 ? Math.floor(a) : Math.floor(arr[i - 1]).toExponential(1) + " - " + Math.floor(a).toExponential(1)
+            }), 
+            overlays["average_funding_usd"].options.colors)
     }
 }
 
