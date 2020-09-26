@@ -16,29 +16,7 @@ let baseLayers = {
     })
 }
 
-let overlays = {
-    // "countries": L.layerGroup()
-    // "startupTotalValue": L.markerClusterGroup({
-    //     iconCreateFunction: function (cluster) {
-    //     return L.divIcon({ html: '<b>' + (cluster.getAllChildMarkers()).map((a) => valueLookup.get(a.getLatLng().toString())[0])
-    //         .reduce((a, b) => (a + b)).toExponential(4) + '</b>' });
-    // }}),
-    // "startupAverageValue": L.markerClusterGroup({
-    //     iconCreateFunction: function (cluster) {
-    //         return L.divIcon({
-    //             html: '<b>' + getAvgFunding(cluster).toExponential(4) + '</b>'
-    //         });
-    //     }
-    // }),
-    // "percentageStartupCountWorldwide": L.markerClusterGroup({
-    //     iconCreateFunction: function (cluster) {
-    //         return L.divIcon({
-    //             html: '<b>' + (((cluster.getAllChildMarkers()).map((a) => valueLookup.get(a.getLatLng().toString())[1])
-    //                 .reduce((a, b) => (a + b))) / allStartupsTotalCount * 100).toFixed(2) + '</b>'
-    //         });
-    //     }
-    // })
-}
+let overlays = {}
 
 //function to give average funding values for each cluster marker
 //too complicated for one-line code
@@ -51,30 +29,20 @@ function getAvgFunding(cluster) {
     return total_money/total_companies
 }
 
-// // Create a legend to display information about our map
-// var info = L.control({
-//     position: "bottomright"
-// });
+// Create a legend to display information about our map
+var info = L.control({
+    position: "bottomright"
+});
 
-// // When the layer control is added, insert a div with the class of "legend"
-// info.onAdd = function () {
-//     var div = L.DomUtil.create("div", "legend");
-//     return div;
-// };
-
-// // // Adding tile layer
-// // L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
-// //     attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
-// //     maxZoom: 18,
-// //     id: "mapbox.streets",
-// //     accessToken: API_KEY
-// // }).addTo(myMap);
+// When the layer control is added, insert a div with the class of "legend"
+info.onAdd = function () {
+    var div = L.DomUtil.create("div", "legend");
+    return div;
+};
 
 
-
-
-// // Add the info legend to the map
-// info.addTo(myMap);
+// Add the info legend to the map
+info.addTo(myMap);
 
 
 let valueLookup = new Map();
@@ -234,33 +202,99 @@ Promise.all([fetch("https://raw.githubusercontent.com/datasets/geo-countries/mas
             inputEl.name = "separateLayers"
         }
 
+        //setup event listener to add legend as necessary
+        let overlayLegendSelector = document.querySelector(".leaflet-control-layers-overlays")
+
+        overlayLegendSelector.addEventListener("change", function (e) {
+            removeLegend()
+            let currSelected = e.target.parentElement.children.item(1).textContent.trim()
+            console.log(currSelected)
+            if (currSelected in legendMapRelations) {
+                legendMapRelations[currSelected]()
+            }
+            e.stopPropagation()
+        })
+
         //set the initial layer
         addedLayers[0].click()
-    }).then(() => {
-        // Add legend (don't forget to add the CSS from index.html)
-        let legend = L.control({ position: 'bottomright' })
-        legend.onAdd = function (map) {
-            var div = L.DomUtil.create('div', 'info legend')
-            var limits = overlays["second_tier_company_count"].options.limits
-            var colors = overlays["second_tier_company_count"].options.colors
-            var labels = []
-            console.log("add Legend!")
-
-            // Add min & max
-            div.innerHTML = '<div class="labels"><div class="min">' + limits[0] + '</div> \
-                <div class="max">' + limits[limits.length - 1] + '</div></div>'
-
-            limits.forEach(function (limit, index) {
-                labels.push('<li style="background-color: ' + colors[index] + '"></li>')
-            })
-
-            div.innerHTML += '<ul>' + labels.join('') + '</ul>'
-            return div
-        }
-        legend.addTo(myMap)
     })
 
     
-    
 
+//create an object to choose cases for whether a legend should be added or not
+legendMapRelations = {
+    "country_company_count": () => {
+        addLegend("Company Count by Country", overlays["country_company_count"]
+        .options.limits, overlays["country_company_count"].options.colors)
+    },
+    "second_tier_company_count": () => {
+        addLegend("Company Count by Country<br>Tier II", overlays["second_tier_company_count"]
+            .options.limits, overlays["second_tier_company_count"].options.colors)
+    },
+    "average_funding_usd": () => {
+        addLegend("Average Funding by Country ($)", overlays["average_funding_usd"]
+            .options.limits, overlays["average_funding_usd"].options.colors)
+    }
+}
+
+
+// Add legend to map - function defined here
+function makeSwatch(color, size) {
+    let colorSwatch = document.createElement("span")
+    // colorSwatch.style.width = size + "px";
+    // colorSwatch.style.height = size + "px";
+    colorSwatch.setAttribute("width", size)
+    colorSwatch.setAttribute("height", size)
+    colorSwatch.style.backgroundColor = color;
+
+    let text = ""
+
+    for (let i = 0; i < size; i++) {
+        text += " "
+    }
+
+    colorSwatch.textContent = text;
+    return colorSwatch
+
+}
+
+
+function addLegend(title, colorDepths, colors) {
+    let legend_el = document.querySelector(".legend");
+    let headerNote = document.createElement("h3")
+    headerNote.textContent = title
+    legend_el.appendChild(headerNote);
+
+    for (let i = 0; i < colorDepths.length; i++) {
+        let colorSwatch = makeSwatch(colors[i], 4)
+
+        //create text element to add
+        let curr_level = document.createElement("div")
+
+
+        curr_level.textContent = ` ${colorDepths[i]}`
+        legend_el.appendChild(curr_level);
+
+
+        curr_level.prepend(colorSwatch);
+    }
+
+    // Add final color and largest value category
+    let lastInd = colorDepths.length
+    let colorSwatch = makeSwatch(colors[lastInd], 4)
+
+
+    // let currLevel = document.createElement("div");
+    // currLevel.textContent = ` > ${colorDepths[lastInd-1]}`
+    legend_el.appendChild(currLevel);
+    currLevel.prepend(colorSwatch)
+
+}
+
+function removeLegend() {
+    let legend_el = document.querySelector(".legend");
+    while (legend_el.children.length > 0) {
+        legend_el.removeChild(legend_el.firstChild)
+    }
+}
 

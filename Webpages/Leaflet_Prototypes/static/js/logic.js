@@ -255,10 +255,6 @@ function addLegend(title, colorDepths, colors) {
 
 }
 
-function checkLegend() {
-    return document.querySelector(".legend").children.length === 0 ? false : true;
-}
-
 function removeLegend() {
     let legend_el = document.querySelector(".legend");
     while(legend_el.children.length > 0) {
