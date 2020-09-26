@@ -24,6 +24,6 @@ span {
   white-space: pre;
 }
 
-.circleIcon {
-  background-color: hsla(50, 0%, 0%, 0.0);
+#map {
+  z-index: 1;
 }
