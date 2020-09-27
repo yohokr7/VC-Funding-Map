@@ -67,3 +67,7 @@ body {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
 }
+
+.leaflet-control-zoom {
+  margin-left: 220px !important;
+}
