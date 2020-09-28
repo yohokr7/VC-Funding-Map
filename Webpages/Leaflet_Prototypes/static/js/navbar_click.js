@@ -9,6 +9,12 @@ $(".scriptHandler").each(function() {
 
 let clusterMapEl = document.getElementById("cluster")
 clusterMapEl.addEventListener("click", function loadCluster() {
+    //remove current map element and replace with an empty element
+    document.querySelector("body").removeChild(document.querySelector("#map"));
+    var newMap = document.createElement("div")
+    newMap.id = "map"
+    document.querySelector("body").appendChild(newMap)
+
     // To Populate Script
     clusterMap = document.createElement("script")
     clusterMap.type = "text/javascript"
@@ -19,9 +25,16 @@ clusterMapEl.addEventListener("click", function loadCluster() {
 
 let choroplethMapEl = document.getElementById("choro")
 choroplethMapEl.addEventListener("click", function loadChoropleth() {
+    //remove current map element and replace with an empty element
+    document.querySelector("body").removeChild(document.querySelector("#map"));
+    var newMap = document.createElement("div")
+    newMap.id = "map"
+    document.querySelector("body").appendChild(newMap)
+
+    // To Populate Script
     choroMap = document.createElement("script")
     choroMap.type = "text/javascript"
-    choroMap.src = "static/js/logic_choroplet.js"
+    choroMap.src = "static/js/logic_choropleth.js"
     document.querySelector("body").appendChild(choroMap)
 })
 

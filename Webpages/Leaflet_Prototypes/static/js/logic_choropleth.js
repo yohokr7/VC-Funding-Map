@@ -1,13 +1,13 @@
 
 // Creating map object
-let myMap = L.map("map", {
+var myMap = L.map("map", {
     center: [34.0522, -118.2437],
     zoom: 8,
     worldCopyJump: true
 });
 
 //make the layers for controlling the map
-let baseLayers = {
+var baseLayers = {
     "Regular": L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
         attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
         maxZoom: 18,
@@ -16,7 +16,7 @@ let baseLayers = {
     })
 }
 
-let overlays = {}
+var overlays = {}
 
 //function to give average funding values for each cluster marker
 //too complicated for one-line code
@@ -45,10 +45,10 @@ info.onAdd = function () {
 info.addTo(myMap);
 
 
-let valueLookup = new Map();
-let allStartupsTotalCount = 0;
-let updatedCountryGeoJSON;
-let usData = [0, 0]
+var valueLookup = new Map();
+var allStartupsTotalCount = 0;
+var updatedCountryGeoJSON;
+var usData = [0, 0]
 
 function addCountry(country){
     let coords = country.geometry.coordinates.map(a => a.map((b) => b.map(c => c.reverse())))
@@ -66,7 +66,7 @@ function addCountry(country){
 // }).then(fetch("../../Test_Data / full_table.json").then(response => response.json()))
 
 Promise.all([fetch("https://raw.githubusercontent.com/datasets/geo-countries/master/data/countries.geojson")
-    .then(a => a.json()), fetch("../../Test_Data/full_table.json").then(response => response.json())])
+    .then(a => a.json()), fetch("./samples.json").then(response => response.json())])
     .then(([countryGeoJSON, ourData]) => {
         console.log([countryGeoJSON, ourData])
         //first group our data by country

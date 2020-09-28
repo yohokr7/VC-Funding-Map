@@ -1,12 +1,12 @@
 // Creating map object
-let myMap = L.map("map", {
+var myMap = L.map("map", {
     center: [34.0522, -118.2437],
     zoom: 8,
     worldCopyJump: true
 });
 
 //make the layers for controlling the map
-let baseLayers = {
+var baseLayers = {
     "Regular": L.tileLayer("https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}", {
         attribution: "Map data &copy; <a href=\"https://www.openstreetmap.org/\">OpenStreetMap</a> contributors, <a href=\"https://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA</a>, Imagery © <a href=\"https://www.mapbox.com/\">Mapbox</a>",
         maxZoom: 18,
@@ -15,7 +15,7 @@ let baseLayers = {
     })
 }
 
-let overlays = {
+var overlays = {
     "startupCount": L.markerClusterGroup(),
     "startupTotalValue": L.markerClusterGroup({
         iconCreateFunction: function (cluster) {
@@ -65,7 +65,7 @@ function getTotalFunding(cluster) {
 
 //generate array of colors for the total funding cluster markers, 
 //based on orders of magnitude (base 10)
-let totalFundingScale = chroma.scale(['yellow', 'red']).mode('rgb').colors(7)
+var totalFundingScale = chroma.scale(['yellow', 'red']).mode('rgb').colors(7)
 
 //get cluster marker color based on total funding amount
 function getTotalFundingColor(val) {
@@ -75,7 +75,7 @@ function getTotalFundingColor(val) {
 
 //generate array of colors for the average funding cluster markers, 
 //based on orders of magnitude (base 10)
-let avgFundingScale = chroma.scale(["yellow", "red"]).mode("lch").colors(5)
+var avgFundingScale = chroma.scale(["yellow", "red"]).mode("lch").colors(5)
 
 //get cluster marker color based on average funding amount
 function getAvgFundingColor(val) {
@@ -119,10 +119,10 @@ L.control.layers(baseLayers, overlays).addTo(myMap)
 info.addTo(myMap);
 
 
-let valueLookup = new Map();
-let allStartupsTotalCount = 0;
+var valueLookup = new Map();
+var allStartupsTotalCount = 0;
 
-fetch("../../Test_Data/full_table.json").then(response => response.json()).then(function addResults(obj) {
+fetch("./samples.json").then(response => response.json()).then(function addResults(obj) {
     for (let item of Object.values(obj)) {
         let lat = item["Latitude"]
         let lng = item["Longitude"]
