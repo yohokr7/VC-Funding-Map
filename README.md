@@ -13,11 +13,17 @@ In addition to the data provided by Kaggle from Crunchbase, we needed to add a c
 
 ## Database Selection & Loading
 
-The type of database selected for this project was PostgreSQL, which is a common, performant SQL dialect that interfaces well with web applications and our data table. Due to time constraints, we did not break up the cleaned data into multiple tables with foreign keys, instead opting for a more monolithic table containing all information in the database. The [SQL_Loader](./SQL_Loader/Sql_Loader.ipynb) Jupyter notebook creates the "vc_funding_db" database within Postgres, and then defines, creates, and populates the "vc_funding" table within that database. As an installation note, you (the user) needs to include a config.py file in the same directory as that notebook, that contains two variables. There needs to be a **user** variable set to your Postgres server username, and a **db_password** variable set to your Postgres server password. These variables are different for every user, so make sure to include your own authentication credentials before trying to run the [SQL_Loader](./SQL_Loader/Sql_Loader.ipynb) notebook!
+The type of database selected for this project was PostgreSQL, which is a common, performant SQL dialect that interfaces well with web applications and our data table. Due to time constraints, we did not break up the cleaned data into multiple tables with foreign keys, instead opting for a more monolithic table containing all information in the database. The [SQL_Loader](./SQL_Loader/Sql_Loader.ipynb) Jupyter notebook creates the "vc_funding_db" database within Postgres, and then defines, creates, and populates the "vc_funding" table within that database. As an installation note, you (the user) needs to include a config.py file in the same directory as that notebook, that contains two variables. There needs to be a **user** variable set to your Postgres server username, and a **db_password** variable set to your Postgres server password. These variables are different for every user, so make sure to include your own authentication credentials before trying to run the [SQL_Loader](./SQL_Loader/Sql_Loader.ipynb) notebook! 
+
+Please note that this **config.py** file will also be used when running the application, in order to connect to the database that holds the data for the application's APIs.
 
 As a side note, the "vc_funding" table uses a composite primary key that is comprised of the (country_code, city) pairing of columns. This pair of columns is expected to be unique for all entries into the table, since the data is grouped by city, so each city and country should not have duplicate entries (it would have just been aggregated into one city in that country).
 
 ## Visualizations
+
+### Overview
+
+There are three visualizations in this dashboard application: a cluster map, a choropleth with world countries, and bar charts for VC funding rounds. The two geographical maps (the cluster map and choropleth map) were created with the [Leaflet](https://leafletjs.com/) framework on top of a [Mapbox](https://www.mapbox.com/) map, and the bar charts were created using the [Chart.js](https://www.chartjs.org/) framework.
 
 ### Cluster Map
 
