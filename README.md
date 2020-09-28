@@ -36,13 +36,18 @@ The choices for these overlays are described as follows:
 This value is initially selected when the cluster map loads. This layer shows circular markers that include the number of startups at a location, with the different marker colors depicting different sets of numbers. Green markers are used for values less than 10, yellow markers are used for values less than 100, and orange markers are used for values of 100 and greater. Zooming out causes the markers to group together with their neighbors, creating a cluster marker that represents a larger area on the map. Zooming in causes the markers to split apart into separate, smaller groupings of markers, enabling finer details of startup distribution in an area to be seen.
 
 <img src="./README Images/cluster_map_startup_count.JPG">
-<br>
 
 #### startupTotalValue
 
 This layer shows markers with circular icons whose colors represent the order of magnitude of total funding at that location (in USD), with the actual amount of total funding as that marker location displayed in text (using scientific notation, since the values get rather large) to four decimal points. The legend for the marker colors is located in the bottom right corner of the map, and uses text as well as numbers to relay the order of magnitude, since looking at a large number with an extra zero or power is not descriptive enough for our purposes. For this layer, it is important to note the differences in marker color first, since that represents different orders of magnitude, and then to look at the number value after that in order to get a good understanding of the approximate VC funding into a geographical area.
 
 <img src="./README Images/cluster_map_total_funding.JPG">
+
+#### startupAverageValue
+
+This layer shows markers with circular icons whose colors represent the order of magnitude of average startup funding at that location (in USD), with the actual amount of average funding as that marker location displayed in text (using scientific notation, since the values get rather large) to four decimal points. The legend for the marker colors is located in the bottom right corner of the map, and uses text as well as numbers to relay the order of magnitude, since looking at a large number with an extra zero or power is not descriptive enough for our purposes. For this layer, it is important to note the differences in marker color first, since that represents different orders of magnitude, and then to look at the number value after that in order to get a good understanding of the approximate average VC funding per startup into a geographical area.
+
+<img src="./README Images/cluster_map_average_funding.JPG">
 
 ### Country Choropleth
 
