@@ -59,10 +59,24 @@ This layer shows markers with green circular icons whose areas represent the "ma
 
 ### City Funding Rounds Bar Chart
 
-## Result Highlights
+<!-- ## Result Highlights -->
 
 ## Application Startup Notes
 
 ## APIs
+
+This web application uses two main RESTful APIs to serve JSON data from the PostgreSQL database connected to the Flask server using SQLAlchemy.
+
+### ./samples.json
+
+The first of these APIs is essentially a "full copy" of the database records - which is unusual for an API but was used in this case because our total (cleaned) records include fewer than 4000 rows, and the project had a high time constraints (1-week turnaround time). This API is used to serve the two geographical map visualizations on this dashboard.
+
+This API is available at the route "domain/samples.json", where "domain" represents the server address of the website. 
+
+### ./api/city/[city-name]
+
+The second of these two RESTful APIs is a more traditional, dynamic API that returns all the information for a single city in the database given the city's name as a parameter in the API route.
+
+This API is available at the route "domain/api/city/[city-name]", where "domain" represents the server address of the website and [city-name] represents the variable city name whose data will be returned by the API once the request is received by the Flask app.
 
 ## Planned Features
