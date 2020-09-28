@@ -27,6 +27,16 @@ There are three visualizations in this dashboard application: a cluster map, a c
 
 ### Cluster Map
 
+The cluster map for this web application is split into four different parts, which can be selected by clicking on the different "overlays" available from the menu on the top right corner of the map, which are shown as radio buttons.
+
+The choices for these overlays are described as follows:
+
+#### startupCount
+
+This value is initially selected when the cluster map loads. This layer shows circular markers that include the number of startups at a location, with the different marker colors depicting different sets of numbers. Green markers are used for values less than 10, yellow markers are used for values less than 100, and orange markers are used for values of 100 and greater. Zooming out causes the markers to group together with their neighbors, creating a cluster marker that represents a larger area on the map. Zooming in causes the markers to split apart into separate, smaller groupings of markers, enabling finer details of startup distribution in an area to be seen.
+
+<img src="./README Images/cluster_map_startup_count.JPG">
+
 ### Country Choropleth
 
 ### City Funding Rounds Bar Chart
@@ -34,5 +44,7 @@ There are three visualizations in this dashboard application: a cluster map, a c
 ## Presentation
 
 ## Result Highlights
+
+## Application Startup Notes
 
 ## Possible Issues
