@@ -49,14 +49,20 @@ This layer shows markers with circular icons whose colors represent the order of
 
 <img src="./README Images/cluster_map_average_funding.JPG">
 
+#### percentageStartupCountWorldwide
+
+This layer shows markers with green circular icons whose areas represent the "market share" of that geographical location's startup count vs. the entire count of startups worldwide, with the precise percentage (to two decimal places) displayed below the marker. As the user zooms out, smaller icons combine into larger markers with higher percentages of the world startup count, and represent larger geographical areas. The reverse is true as the user zooms in on a location - the markers split apart into different locations and give more specific information about the percentage of startups in a smaller geographical area.
+
+<img src="./README Images/cluster_map_market_share.JPG">
+
 ### Country Choropleth
 
 ### City Funding Rounds Bar Chart
-
-## Presentation
 
 ## Result Highlights
 
 ## Application Startup Notes
 
-## Possible Issues
+## APIs
+
+## Planned Features
