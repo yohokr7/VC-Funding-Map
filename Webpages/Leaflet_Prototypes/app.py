@@ -49,11 +49,12 @@ def samples():
 
 # gives a dynamic api that serves the data
 # from the database for each city requested
-@app.route("/api/city/<city>")
-def city_data(city):
+@app.route("/api/city/<country_code>/<city>")
+def city_data(country_code, city):
     session = Session(db)
     # only need one result for each city query
-    results = session.query(VC_Funding).filter(VC_Funding.city == city).first()
+    results = session.query(VC_Funding).filter(
+        VC_Funding.city == city).filter((VC_Funding.country_code == country_code)).first()
     session.close()
     return get_model_dict(results)
 
