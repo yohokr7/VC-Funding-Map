@@ -1,11 +1,13 @@
 $ = jQuery
 
+// Script Removal
 $(".scriptHandler").each(function() {
     $(this).click(function() {
         $("script").last().remove()
     })
 })
 
+// Appending Body for Maps
 $(".dropdownMapButton").each(function() {
     $(this).click(function() {
         //remove current map element and replace with an empty element
@@ -16,6 +18,7 @@ $(".dropdownMapButton").each(function() {
     })
 })
 
+// Appending Body for Maps
 $(".dropdownChartButton").each(function() {
     $(this).click(function() {
         //remove current map element and replace with an empty element
@@ -30,8 +33,7 @@ $(".dropdownChartButton").each(function() {
 })
 
 
-// Script Appending
-
+// Script Appending For Mapping
 let clusterMapEl = document.getElementById("cluster")
 clusterMapEl.addEventListener("click", function loadCluster() {
     // To Populate Script
@@ -51,12 +53,42 @@ choroplethMapEl.addEventListener("click", function loadChoropleth() {
     document.querySelector("body").appendChild(choroMap)
 })
 
-let chartingUSEl = document.getElementById("chartingUS")
+
+// Script Appending For Charting
 let date = Date.now().toString()
+
+let chartingUSEl = document.getElementById("chartingUSAll")
 chartingUSEl.addEventListener("click", function loadChart() {
     // To Populate Script
-    chartScript = document.createElement("script")
-    chartScript.type = "text/javascript"
-    chartScript.src = "static/js/populating_page/charting_US_all.js?t=" + date
-    document.querySelector("body").appendChild(chartScript)
+    chartUSScript = document.createElement("script")
+    chartUSScript.type = "text/javascript"
+    chartUSScript.src = "static/js/populating_page/charting_US_all.js?t=" + date
+    document.querySelector("body").appendChild(chartUSScript)
+})
+
+let chartingGlobalEl = document.getElementById("chartingGlobalAll")
+chartingGlobalEl.addEventListener("click", function loadChart() {
+    // To Populate Script
+    chartGlobalScript = document.createElement("script")
+    chartGlobalScript.type = "text/javascript"
+    chartGlobalScript.src = "static/js/populating_page/charting_global_all.js?t=" + date
+    document.querySelector("body").appendChild(chartGlobalScript)
+})
+
+let chartingUSAvgEl = document.getElementById("chartingUSAvg")
+chartingUSAvgEl.addEventListener("click", function loadChart() {
+    // To Populate Script
+    chartUSAvgScript = document.createElement("script")
+    chartUSAvgScript.type = "text/javascript"
+    chartUSAvgScript.src = "static/js/populating_page/charting_US_avg.js?t=" + date
+    document.querySelector("body").appendChild(chartUSAvgScript)
+})
+
+let chartingGlobalAvgEl = document.getElementById("chartingGlobalAvg")
+chartingGlobalAvgEl.addEventListener("click", function loadChart() {
+    // To Populate Script
+    chartGlobalAvgScript = document.createElement("script")
+    chartGlobalAvgScript.type = "text/javascript"
+    chartGlobalAvgScript.src = "static/js/populating_page/charting_global_avg.js?t=" + date
+    document.querySelector("body").appendChild(chartGlobalAvgScript)
 })

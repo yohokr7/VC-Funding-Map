@@ -32,7 +32,7 @@
    href="https://unpkg.com/leaflet.markercluster@1.0.3/dist/MarkerCluster.Default.css">
   
  <!-- Chart.js -->
- <script type="text/javascript" src="static/js/Chart.bundle.min.js"></script>
+ <script type="text/javascript" src="static/js/imports/Chart.bundle.min.js"></script>
  
  <!-- Our CSS -->
  <link rel="stylesheet" type="text/css" href="static/css/style.css">
@@ -52,10 +52,19 @@
 
     <button class="dropdown-btn">Visualizations<i class="fa fa-caret-down"></i></button>
     <div class="dropdown-container">
-      <a id = "chartingUS" class = "dropdownChartButton scriptHandler">Top 5- US</a>
-      <a id = "charting" class = "dropdownChartButton scriptHandler">Top 5- Excluding US</a>
+      <button class="dropdown-btn">Total Funding<i class="fa fa-caret-down"></i></button>
+      <div class="dropdown-container">
+        <a id = "chartingUSAll" class = "dropdownChartButton scriptHandler">Top 5- US</a>
+        <a id = "chartingGlobalAll" class = "dropdownChartButton scriptHandler">Top 5- Not US</a>
+      </div>
+      
+      <button class="dropdown-btn">Avg Funding<i class="fa fa-caret-down"></i></button>
+      <div class="dropdown-container">
+        <a id = "chartingUSAvg" class = "dropdownChartButton scriptHandler">Top 5- US</a>
+        <a id = "chartingGlobalAvg" class = "dropdownChartButton scriptHandler">Top 5- Not US</a>
+      </div>
     </div>
-    <a class = "sidenavButton scriptHandler">Data</a>
+  
   </div>
   <!-- End of Sidenav -->
 
@@ -63,13 +72,13 @@
   <div id="map"></div>
   
   <!-- Chroma.js (for color scales) -->
-  <script type="text/javascript" src="static/js/chroma.min.js"></script>
+  <script type="text/javascript" src="static/js/imports/chroma.min.js"></script>
   <!-- D3 JavaScript -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.3/d3.min.js"></script>
   <!-- Country Code Converter Object & Function - From https://gist.github.com/maephisto/9228207 -->
-  <script type="text/javascript" src="static/js/country_code_conversion.js"></script>
+  <script type="text/javascript" src="static/js/imports/country_code_conversion.js"></script>
   <!-- Leaflet-Choropleth JavaScript -->
-  <script type="text/javascript" src="static/js/choropleth.js"></script>
+  <script type="text/javascript" src="static/js/imports/choropleth.js"></script>
   <!-- API key -->
   <script type="text/javascript" src="static/js/config.js"></script>
   <!-- To Chose Map Type -->
