@@ -1,2 +1,2 @@
 user = "postgres"
-db_password = "INSERT POSTGRESQL PASSWORD"
+db_password = "12345"

@@ -27,3 +27,9 @@ span {
 #map {
   z-index: 1;
 }
+
+.myChart {
+  margin-left: 200px;
+  padding-left: 20px;
+  width: 85% !important;
+}

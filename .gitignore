@@ -3,3 +3,5 @@
 /Data_Cleaner/__pycache__
 /VC_Data/.ipynb_checkpoints
 /SQL_Loader/config.py
+/Webpages/Leaflet_Prototypes/config.py
+/Webpages/Leaflet_Prototypes/static/js/config.js

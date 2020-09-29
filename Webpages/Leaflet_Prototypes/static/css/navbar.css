@@ -13,7 +13,7 @@ body {
   background-color: #111;
   overflow-x: hidden;
   padding-top: 20px;
-  z-index: 2;
+  z-index: 3 !important;
 }
 
 /* Style the sidenav links and the dropdown button */
