@@ -37,7 +37,7 @@ clusterMapEl.addEventListener("click", function loadCluster() {
     // To Populate Script
     clusterMap = document.createElement("script")
     clusterMap.type = "text/javascript"
-    clusterMap.src = "static/js/logic.js"
+    clusterMap.src = "static/js/populating_page/logic.js"
     document.querySelector("body").appendChild(clusterMap)
 })
 
@@ -47,15 +47,16 @@ choroplethMapEl.addEventListener("click", function loadChoropleth() {
     // To Populate Script
     choroMap = document.createElement("script")
     choroMap.type = "text/javascript"
-    choroMap.src = "static/js/logic_choropleth.js"
+    choroMap.src = "static/js/populating_page/logic_choropleth.js"
     document.querySelector("body").appendChild(choroMap)
 })
 
-let chartingMapEl = document.getElementById("charting")
-chartingMapEl.addEventListener("click", function loadChart() {
+let chartingUSEl = document.getElementById("chartingUS")
+let date = Date.now().toString()
+chartingUSEl.addEventListener("click", function loadChart() {
     // To Populate Script
     chartScript = document.createElement("script")
     chartScript.type = "text/javascript"
-    chartScript.src = "static/js/charting.js"
+    chartScript.src = "static/js/populating_page/charting_US_all.js?t=" + date
     document.querySelector("body").appendChild(chartScript)
 })
