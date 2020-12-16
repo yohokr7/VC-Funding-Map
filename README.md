@@ -29,7 +29,7 @@ There are three visualizations in this dashboard application: a cluster map, a c
 
 ### Cluster Map
 
-The cluster map for this web application is split into four different parts, which can be selected by clicking on the different "overlays" available from the menu on the top right corner of the map, which are shown as radio buttons.
+The cluster map for this web application is split into five different parts, which can be selected by clicking on the different "overlays" available from the menu on the top right corner of the map, which are shown as radio buttons.
 
 The choices for these overlays are described as follows:
 
@@ -57,7 +57,37 @@ This layer shows markers with green circular icons whose areas represent the "ma
 
 <img src="./README Images/cluster_map_market_share.JPG">
 
+#### percentageStartupFundingWorldwide
+
+This layer shows markers with blue circular icons whose areas represent the "market share" of that geographical location's startup funding vs. the entire funding amount provided to startups worldwide, with the precise percentage (to two decimal places) displayed below the marker. As the user zooms out, smaller icons combine into larger markers with higher percentages of the world startup funding, and represent larger geographical areas. The reverse is true as the user zooms in on a location - the markers split apart into different locations and give more specific information about the percentage of startup funding in a smaller geographical area.
+
+<img src="./README Images/cluster_map_funding_percentage.JPG">
+
 ### Country Choropleth
+
+The choropleth map for this web application is split into three different parts, which can be selected by clicking on the different "overlays" available from the menu on the top right corner of the map, which are shown as radio buttons. Additionally, more details for each country are shown if the country is clicked on.
+
+The choices for these overlays are described as follows:
+
+#### country_company_count
+
+This layer shows the company count per country on given a linear scale (see the legend in the lower right corner of the map for more details). The dominance of the US in startup count by country is apparent, with the US having over ten times more startups than the next country by startup count, which was the UK. As a result, the next choropleth was created to help visibly discern the second-tier countries by startup count.
+
+<img src="./README Images/choropleth_startup_count.JPG">
+
+#### second_tier_company_count
+
+This layer shows the company count per country (excluding the US) on given a linear scale (see the legend in the lower right corner of the map for more details). These countries can be viewed as second-tier countries for startups, to get a better understanding of notable countries with startups outside the US.
+
+<img src="./README Images/choropleth_startup_count_tier_II.JPG">
+
+#### second_tier_company_count
+
+This layer shows the average funding per startup by country, with a detailed legend in the lower right hand corner giving the ranges of values that correspond to the shading levels. There are essentially three levels, or groupings of average startup funding (given by a k-means clustering algorithm), which represent the highest level of funding (or "lots" of funding), the middling level of funding (or "some" funding), and the lowest level of funding ("none"). The map can be used to visually show the geographic distribution of average funding per startup per country worldwide.
+
+<img src="./README Images/choropleth_avg_funding.JPG">
+
+
 
 ### City Funding Rounds Bar Chart
 
