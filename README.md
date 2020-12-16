@@ -81,7 +81,7 @@ This layer shows the company count per country (excluding the US) on given a lin
 
 <img src="./README Images/choropleth_startup_count_tier_II.JPG">
 
-#### second_tier_company_count
+#### average_funding_usd
 
 This layer shows the average funding per startup by country, with a detailed legend in the lower right hand corner giving the ranges of values that correspond to the shading levels. There are essentially three levels, or groupings of average startup funding (given by a k-means clustering algorithm), which represent the highest level of funding (or "lots" of funding), the middling level of funding (or "some" funding), and the lowest level of funding ("none"). The map can be used to visually show the geographic distribution of average funding per startup per country worldwide.
 
