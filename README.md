@@ -89,7 +89,11 @@ This layer shows the average funding per startup by country, with a detailed leg
 
 
 
-### City Funding Rounds Bar Chart
+### City Funding Rounds Bar Charts
+
+There are four different bar charts available on this data dashboard, which display the total and average funding amounts in USD ($) by round of funding for the top five US cities and the top five foreign cities, respectively. An example of the total funding bar chart for US cities is depicted below - the app itself has larger, better quality bar charts so only one bar chart example is provided here.
+
+<img src="./README Images/total_funding_us_cities.png">
 
 <!-- ## Result Highlights -->
 
