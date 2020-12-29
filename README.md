@@ -117,4 +117,10 @@ This API is available at the route "domain/api/city/[country-code]/[city-name]",
 
 ## Planned Features
 
-Coming soon!
+The first planned feature to be implemented is auto-loading the first cluster map when the app starts - this will engage the user immediately when the app is opened.
+
+We are also planning on overhauling the interface by adding a "Help" or "User Guide" to the application, to enable new users to more easily navigate around the page and find information they are looking for. This will also include an explanation of the app's purpose, data used and served, and explanations of the map layers and bar charts.
+
+Finally, if there is sufficient interest in the application, we could add a date filter to display data for ranges of years or particular years between 2005 and 2015. 
+
+This app was also designed to import new data automatically and could live-update using Crunchbase data, but their API subscription fee is cost-prohibitive at the time, so that feature is possible but not planned at the moment.
