@@ -113,7 +113,7 @@ This API is available at the route "domain/samples.json", where "domain" represe
 
 The second of these two RESTful APIs is a more traditional, dynamic API that returns all the information for a single city in the database given the city's name and country code as parameters in the API route.
 
-This API is available at the route "domain/api/city/[country-code]/[city-name]", where "domain" represents the server address of the website and [city-name] represents the variable city name whose data will be returned by the API once the request is received by the Flask app. The [country-code] parameter specifies the country in which the city is located, since there are some cities with the same name in multiple countries.
+This API is available at the route "domain/api/city/[country-code]/[city-name]", where "domain" represents the server address of the website and [city-name] represents the variable city name whose data will be returned by the API once the request is received by the Flask app. The [country-code] parameter specifies the country in which the city is located (using the ISO alpha-3 three-letter formatting), since there are some cities with the same name in multiple countries.
 
 ## Planned Features
 
