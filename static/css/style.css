@@ -1,0 +1,35 @@
+body {
+  padding: 0;
+  margin: 0;
+}
+
+#map,
+body,
+html {
+  height: 100%;
+}
+
+.circleIcon {
+  background-color: hsla(50, 0%, 0%, 0.0);
+}
+
+.legend {
+  background-color: beige;
+  padding-left: 8px;
+  padding-right: 8px;
+  padding-bottom: 3px;
+}
+
+span {
+  white-space: pre;
+}
+
+#map {
+  z-index: 1;
+}
+
+.myChart {
+  margin-left: 200px;
+  padding-left: 20px;
+  width: 85% !important;
+}

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Venture Capital Funding</title>
+  
+  <!-- JQuery -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+  <!-- NavBar CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="static/css/navbar.css">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin="" />
+
+ <!-- Leaflet JS -->
+ <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+   integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+   crossorigin=""></script>
+
+ <!-- Marker Cluster JS & CSS -->
+ <script type="text/javascript"
+   src="https://unpkg.com/leaflet.markercluster@1.0.3/dist/leaflet.markercluster.js"></script>
+ <link rel="stylesheet" type="text/css" href="https://unpkg.com/leaflet.markercluster@1.0.3/dist/MarkerCluster.css">
+ <link rel="stylesheet" type="text/css"
+   href="https://unpkg.com/leaflet.markercluster@1.0.3/dist/MarkerCluster.Default.css">
+  
+ <!-- Chart.js -->
+ <script type="text/javascript" src="static/js/imports/Chart.bundle.min.js"></script>
+ 
+ <!-- Our CSS -->
+ <link rel="stylesheet" type="text/css" href="static/css/style.css">
+
+</head>
+
+<body>
+  <!-- Start of Sidenav -->
+  <div class="sidenav">
+    <h1>Global Venture Capital Funding</h1>
+    
+    <button class="dropdown-btn">Maps<i class="fa fa-caret-down"></i></button>
+    <div class="dropdown-container">
+      <a id = "cluster" class = "dropdownMapButton scriptHandler" >Cluster</a>
+      <a id = "choro" class = "dropdownMapButton scriptHandler">Choropleth</a>
+    </div>
+
+    <button class="dropdown-btn">Visualizations<i class="fa fa-caret-down"></i></button>
+    <div class="dropdown-container">
+      <button class="dropdown-btn">Total Funding<i class="fa fa-caret-down"></i></button>
+      <div class="dropdown-container">
+        <a id = "chartingUSAll" class = "dropdownChartButton scriptHandler">Top 5- US</a>
+        <a id = "chartingGlobalAll" class = "dropdownChartButton scriptHandler">Top 5- Not US</a>
+      </div>
+      
+      <button class="dropdown-btn">Avg Funding<i class="fa fa-caret-down"></i></button>
+      <div class="dropdown-container">
+        <a id = "chartingUSAvg" class = "dropdownChartButton scriptHandler">Top 5- US</a>
+        <a id = "chartingGlobalAvg" class = "dropdownChartButton scriptHandler">Top 5- Not US</a>
+      </div>
+    </div>
+  
+  </div>
+  <!-- End of Sidenav -->
+
+  <!-- For Map to Populate -->
+  <div id="map"></div>
+  
+  <!-- Chroma.js (for color scales) -->
+  <script type="text/javascript" src="static/js/imports/chroma.min.js"></script>
+  <!-- D3 JavaScript -->
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.3/d3.min.js"></script>
+  <!-- Country Code Converter Object & Function - From https://gist.github.com/maephisto/9228207 -->
+  <script type="text/javascript" src="static/js/imports/country_code_conversion.js"></script>
+  <!-- Leaflet-Choropleth JavaScript -->
+  <script type="text/javascript" src="static/js/imports/choropleth.js"></script>
+  <!-- API key -->
+  <script type="text/javascript" src="static/js/config.js"></script>
+  <!-- To Chose Map Type -->
+  <script type="text/javascript" src="static/js/navbar_click.js"></script>
+  <!-- Dropdown Menu JS -->
+  <script type="text/javascript" src="static/js/dropdown.js"></script>
+  <!-- To be Removed and Replaced -->
+  <script type = "#"></script>
+</body>
+
+</html>
